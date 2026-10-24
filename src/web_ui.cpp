@@ -1,4 +1,5 @@
 #include "web_ui.h"
+#include "api_state.h"
 #include <LittleFS.h>
 #include "logo_png.h"
 #include <math.h>
@@ -360,6 +361,9 @@ void webUiBegin() {
     res->addHeader("Cache-Control", "public, max-age=86400");
     r->send(res);
   };
+  server.on("/api/state", HTTP_GET, [](AsyncWebServerRequest* r) {
+    r->send(200, "application/json", apiStateJson());
+  });
   server.on("/logo.png", HTTP_GET, serveLogo);
   server.on("/favicon.ico", HTTP_GET, serveLogo);   // часть браузеров просит его напрямую
   server.on("/favicon.png", HTTP_GET, serveLogo);

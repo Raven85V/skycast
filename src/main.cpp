@@ -26,6 +26,7 @@
 #include "ui_home.h"
 #include "ui_settings.h"
 #include "weather.h"
+#include "api_state.h"
 #include "web_ui.h"
 #include "wsensors.h"
 
@@ -120,6 +121,80 @@ static void setMode(Mode m) {
   if (mode == MODE_HOME) uiHomeClose();
   mode = m;
   restoreScreen();
+}
+
+
+// ---------------------------------------------------------------------------
+// JSON-состояние станции для внешних интеграций (GET /api/state)
+// ---------------------------------------------------------------------------
+String apiStateJson() {
+  JsonDocument d;
+  d["station"] = "SKYCAST";
+  d["version"] = "1.0.0";
+  d["uptime_s"] = (uint32_t)(millis() / 1000UL);
+
+  JsonObject w = d["weather"].to<JsonObject>();
+  w["has"] = wx.hasCur;
+  if (wx.hasCur) {
+    w["temp"] = wx.cur.temp;
+    w["feels"] = wx.cur.feels;
+    w["humidity"] = wx.cur.humidity;
+    w["pressure_mmhg"] = wx.cur.pressureMmHg;
+    w["wind_ms"] = wx.cur.wind;
+    w["wind_deg"] = wx.cur.windDeg;
+    w["clouds"] = wx.cur.clouds;
+    w["icon"] = wx.cur.icon;
+    w["desc"] = wx.cur.desc;
+    w["sunrise"] = (long)wx.cur.sunrise;
+    w["sunset"] = (long)wx.cur.sunset;
+  }
+  w["pop_now"] = wx.popNow;
+  w["updated"] = (long)wx.updated;
+  JsonArray days = w["days"].to<JsonArray>();
+  for (int i = 0; i < wx.dayCount; i++) {
+    JsonObject o = days.add<JsonObject>();
+    o["ts"] = (long)wx.days[i].ts;
+    o["tmin"] = wx.days[i].tmin;
+    o["tmax"] = wx.days[i].tmax;
+    o["pop"] = wx.days[i].pop;
+    o["icon"] = wx.days[i].icon;
+  }
+
+  JsonObject s = d["sensors"].to<JsonObject>();
+  float t, h, p;
+  t = h = p = NAN;
+  if (wsensorsMain(t, h, p)) {
+    JsonObject m = s["main"].to<JsonObject>();
+    if (!isnan(t)) m["temp"] = t;
+    if (!isnan(h)) m["humidity"] = h;
+    if (!isnan(p)) m["pressure_hpa"] = p;
+  }
+  t = h = p = NAN;
+  if (wsensorsHome(t, h, p)) {
+    JsonObject m = s["home"].to<JsonObject>();
+    if (!isnan(t)) m["temp"] = t;
+    if (!isnan(h)) m["humidity"] = h;
+    if (!isnan(p)) m["pressure_hpa"] = p;
+  }
+  JsonArray list = s["list"].to<JsonArray>();
+  for (int i = 0; i < wsensorsCount(); i++) {
+    String key, label;
+    if (!wsensorsInfo(i, key, label)) continue;
+    float st, sh, sp;
+    uint32_t age = 0;
+    if (!wsensorsValues(i, st, sh, sp, age)) continue;
+    JsonObject o = list.add<JsonObject>();
+    o["id"] = key;
+    o["label"] = label;
+    if (!isnan(st)) o["temp"] = st;
+    if (!isnan(sh)) o["humidity"] = sh;
+    if (!isnan(sp)) o["pressure_hpa"] = sp;
+    o["age_s"] = age / 1000UL;
+  }
+
+  String out;
+  serializeJson(d, out);
+  return out;
 }
 
 void setup() {

@@ -1,0 +1,25 @@
+src/weather.cpp: In function 'bool fetchPirateWeather(Weather&, String&)':
+src/weather.cpp:210:26: warning: 'DynamicJsonDocument' is deprecated: use JsonDocument instead [-Wdeprecated-declarations]
+  210 |   DynamicJsonDocument doc(16384);
+      |                          ^
+In file included from .pio/libdeps/skycast/ArduinoJson/src/ArduinoJson.hpp:65,
+                 from .pio/libdeps/skycast/ArduinoJson/src/ArduinoJson.h:9,
+                 from src/weather.cpp:8:
+.pio/libdeps/skycast/ArduinoJson/src/ArduinoJson/compatibility.hpp:125:58: note: declared here
+  125 | class ARDUINOJSON_DEPRECATED("use JsonDocument instead") DynamicJsonDocument
+      |                                                          ^~~~~~~~~~~~~~~~~~~
+src/weather.cpp: In function 'int weatherFetchPressureHistory(float*, int)':
+src/weather.cpp:333:28: warning: 'DynamicJsonDocument' is deprecated: use JsonDocument instead [-Wdeprecated-declarations]
+  333 |     DynamicJsonDocument doc(16384);
+      |                            ^
+.pio/libdeps/skycast/ArduinoJson/src/ArduinoJson/compatibility.hpp:125:58: note: declared here
+  125 | class ARDUINOJSON_DEPRECATED("use JsonDocument instead") DynamicJsonDocument
+      |                                                          ^~~~~~~~~~~~~~~~~~~
+src/web_ui.cpp: In lambda function:
+src/web_ui.cpp:360:53: warning: 'AsyncWebServerResponse* AsyncWebServerRequest::beginResponse_P(int, const String&, const uint8_t*, size_t, AwsTemplateProcessor)' is deprecated: Replaced by beginResponse(int code, const String& contentType, const uint8_t* content, size_t len, AwsTemplateProcessor callback = nullptr) [-Wdeprecated-declarations]
+  360 |     AsyncWebServerResponse* res = r->beginResponse_P(200, "image/png", LOGO_PNG, LOGO_PNG_LEN);
+      |                                   ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from src/web_ui.cpp:8:
+.pio/libdeps/skycast/ESPAsyncWebServer/src/ESPAsyncWebServer.h:772:27: note: declared here
+  772 |   AsyncWebServerResponse *beginResponse_P(int code, const String &contentType, const uint8_t *content, size_t len, AwsTemplateProcessor callback = nullptr) {
+      |                           ^~~~~~~~~~~~~~~
