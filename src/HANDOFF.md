@@ -1,4 +1,4 @@
-# SANTON METEO — состояние проекта (для нового чата)
+# SKYCAST — состояние проекта (для нового чата)
 
 Плата: Sunton ESP32-8048S070, 7" 800x480 RGB, GT911, ESP32-S3 N16R8 (16 МБ флеш, 8 МБ PSRAM).
 Сборка: PlatformIO, pioarduino 55.03.37, окружения skycast (основное) и skycasttest (тест экрана, папка hwtest/).
@@ -443,7 +443,7 @@ ui_radio.cpp: LIST_* переименованы в RAD_LIST_* (конфликт 
 ## v61 (2026-10-21): датчики по Wi-Fi в Home Assistant
 - Каждый датчик из /settings/sensors публикуется в HA как до трёх сущностей: «<название> — температура», «— влажность», «— давление». Название берётся из поля «Название датчика»; если пусто - ключ.
 - Топики состояний: <base>/wifi/<slug>/temp, /humidity, /pressure, где slug - ключ датчика, приведённый к нижнему регистру, недопустимые символы заменены на «_» (не длиннее 24).
-- Discovery: homeassistant/sensor/santon_<mac>/wifi_<slug>_<field>/config (retain), device_class temperature / humidity / pressure, тот же device «SANTON METEO». Публикуется при подключении к брокеру в режиме «Home Assistant».
+- Discovery: homeassistant/sensor/skycast_<mac>/wifi_<slug>_<field>/config (retain), device_class temperature / humidity / pressure, тот же device «SKYCAST». Публикуется при подключении к брокеру в режиме «Home Assistant».
 - Старые значения не отправляются: если возраст данных больше «Убирать значение, если датчик молчит» (staleMin), значения по этому датчику пропускаются - в HA остаётся последнее.
 - Ограничение: при удалении датчика из списка его сущности остаются в HA (конфиг с пустым payload не публикуется) - удалять вручную в HA.
 - Сборка падала с «Failed to install Python dependencies into penv»: в этот момент в penv работали процессы PlatformIO Home из VS Code (python -m platformio home, PID 21912/26556). После их остановки сборка прошла.
