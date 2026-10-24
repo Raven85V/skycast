@@ -227,7 +227,7 @@ static void readAndSend() {
 void setup() {
   Serial.begin(115200);
   delay(200);
-  Serial.printf("\nДатчик SANTON METEO, id=%s\n", NODE_ID);
+  Serial.printf("\nSKYCAST Sensor, id=%s\n", NODE_ID);
 
   detectAll();
   readAndSend();
