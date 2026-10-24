@@ -64,10 +64,32 @@ platformio run -e skycast -t uploadfs    # файловая система: ик
 Логин веб-настроек — `admin`, пароль задаётся на странице «Интеграции»
 (пустой пароль отключает OTA-обновление).
 
+## Беспроводной датчик (`sensor-node/`)
+
+Отдельная прошивка для ESP8266 (Wemos D1 mini) или ESP32: сама находит подключённые
+датчики (BME280/BMP280 на I2C, DS18B20 на OneWire) и раз в минуту отправляет
+показания на станцию по Wi-Fi (`POST /api/sensor`).
+
+Сборка: `cd sensor-node && pio run -e esp8266 -t upload` (или `-e esp32`).
+
+**Перед сборкой** создайте `sensor-node/src/secrets.h` со своими значениями
+(этот файл в `.gitignore` и в репозиторий не попадает):
+
+```cpp
+#define WIFI_SSID    "your-wifi"
+#define WIFI_PASS    "your-password"
+#define STATION_HOST "192.168.1.100"
+#define STATION_PORT 80
+#define STATION_KEY  ""
+```
+
+Без этого файла прошивка соберётся с заглушками и не подключится к сети.
+
 ## Структура
 
 ```
-src/            исходники (экраны, погода, датчики, интеграции)
+src/            исходники станции (экраны, погода, датчики, интеграции)
+sensor-node/    прошивка беспроводного датчика (ESP8266/ESP32)
 data/           файлы LittleFS
 hwtest/         отдельный тест экрана
 partitions_16MB.csv
