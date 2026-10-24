@@ -113,7 +113,7 @@ platformio run -e skycast -t uploadfs    # файловая система: ик
 **Установка через HACS:**
 
 1. HACS → «Интеграции» → ⋮ → **Custom repositories**
-2. URL: `https://github.com/Raven85V/skycast`, категория — **Integration**
+2. URL: `https://github.com/skycast-project/skycast`, категория — **Integration**
 3. Установить «SKYCAST Weather Station» → перезапустить Home Assistant
 4. Настройки → Устройства и службы → **Добавить интеграцию** → «SKYCAST Weather Station»
 5. Ввести IP станции (виден внизу её экрана)

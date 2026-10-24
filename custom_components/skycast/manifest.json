@@ -5,8 +5,8 @@
     "@Raven85V"
   ],
   "config_flow": true,
-  "documentation": "https://github.com/Raven85V/skycast",
-  "issue_tracker": "https://github.com/Raven85V/skycast/issues",
+  "documentation": "https://github.com/skycast-project/skycast",
+  "issue_tracker": "https://github.com/skycast-project/skycast/issues",
   "iot_class": "local_polling",
   "requirements": [],
   "version": "1.2.0"
