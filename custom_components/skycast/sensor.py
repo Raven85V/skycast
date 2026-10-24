@@ -26,6 +26,15 @@ from .coordinator import SkycastCoordinator
 from . import SkycastConfigEntry
 
 
+def _day_value(data: dict, idx: int, kind: str):
+    """Значение дневного прогноза: idx 0..4, kind max/min/pop."""
+    days = (data.get("weather") or {}).get("days") or []
+    if idx >= len(days):
+        return None
+    day = days[idx] or {}
+    return day.get("tmax" if kind == "max" else "tmin" if kind == "min" else "pop")
+
+
 @dataclass(frozen=True, kw_only=True)
 class SkycastSensor(SensorEntityDescription):
     value: Callable[[dict], float | int | None]
@@ -132,6 +141,25 @@ async def async_setup_entry(
                     (i.get("humidity") for i in ((d.get("sensors") or {}).get("list") or []) if i.get("id") == k),
                     None))(sid)),
             device))
+
+    # прогноз на 5 дней: макс/мин/осадки по каждому дню
+    for i in range(5):
+        for kind, name, unit, cls in (
+            ("max", "макс", UnitOfTemperature.CELSIUS, SensorDeviceClass.TEMPERATURE),
+            ("min", "мин", UnitOfTemperature.CELSIUS, SensorDeviceClass.TEMPERATURE),
+            ("pop", "осадки", PERCENTAGE, None),
+        ):
+            entities.append(SkycastEntity(
+                coordinator,
+                SkycastSensor(
+                    key=f"day{i}_{kind}",
+                    name=f"Прогноз {i + 1}: {name}",
+                    native_unit_of_measurement=unit,
+                    device_class=cls,
+                    state_class=SensorStateClass.MEASUREMENT,
+                    value=(lambda idx, k: lambda d: _day_value(d, idx, k))(i, kind),
+                ),
+                device))
 
     async_add_entities(entities)
 
