@@ -474,8 +474,10 @@ void loop() {
 
       char msg[96];
       if (err.length()) {
-        snprintf(msg, sizeof(msg), "Ошибка: %s", err.c_str());
+        // на экране — коротко: какой источник не ответил; подробности в лог
+        snprintf(msg, sizeof(msg), "%s", g_set.wxSrc == 1 ? "ошибка PW" : "ошибка OWM");
         setFooter(msg, true);
+        Serial.printf("Погода: %s (%s)\n", msg, err.c_str());
         nextFetch = millis() + RETRY_MS;
       } else {
         tm t;
