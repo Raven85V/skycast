@@ -96,6 +96,9 @@ void integrationsSetWeatherEx(float feels, int clouds, int windDeg, float tmin, 
 // arg - значение для IG_CMD_BRIGHT (яркость в процентах), можно nullptr
 int integrationsTakeCommand(int* arg = nullptr);
 
+// Поставить команду в очередь (используется HTTP-API /api/cmd).
+void integrationsQueueCommand(int cmd, int arg = 0);
+
 // Для веб-интерфейса
 IntegrationsConfig getIntegrationsConfig();
 void setIntegrationsConfig(const IntegrationsConfig &c);   // применяет и сохраняет в NVS

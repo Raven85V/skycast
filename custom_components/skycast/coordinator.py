@@ -1,4 +1,4 @@
-"""Опрос станции по HTTP."""
+"""Опрос станции и отправка команд по HTTP."""
 from __future__ import annotations
 
 import asyncio
@@ -17,7 +17,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class SkycastCoordinator(DataUpdateCoordinator[dict]):
-    """Держит последний ответ /api/state."""
+    """Держит последний ответ /api/state и умеет отправлять команды."""
 
     def __init__(self, hass: HomeAssistant, entry: ConfigEntry) -> None:
         self.host = entry.data["host"].strip()
@@ -46,3 +46,23 @@ class SkycastCoordinator(DataUpdateCoordinator[dict]):
         if not isinstance(data, dict) or "weather" not in data:
             raise UpdateFailed("неожиданный ответ станции")
         return data
+
+    async def async_send_command(self, command: str, value: int | None = None) -> bool:
+        """Отправить команду станции: /api/cmd?c=...&v=..."""
+        params = {"c": command}
+        if value is not None:
+            params["v"] = str(value)
+        url = f"{self.base_url}/api/cmd"
+        try:
+            timeout = aiohttp.ClientTimeout(total=10)
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                async with session.get(url, params=params) as resp:
+                    resp.raise_for_status()
+                    data = await resp.json(content_type=None)
+        except (aiohttp.ClientError, asyncio.TimeoutError) as err:
+            _LOGGER.error("Команда %s не отправлена: %s", command, err)
+            return False
+        ok = bool(data.get("ok"))
+        if not ok:
+            _LOGGER.error("Станция отклонила команду %s: %s", command, data)
+        return ok

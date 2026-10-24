@@ -361,6 +361,19 @@ void webUiBegin() {
     res->addHeader("Cache-Control", "public, max-age=86400");
     r->send(res);
   };
+  server.on("/api/cmd", HTTP_GET, [](AsyncWebServerRequest* r) {
+    String c = r->hasParam("c") ? r->getParam("c")->value() : String();
+    int v = r->hasParam("v") ? r->getParam("v")->value().toInt() : 0;
+    int cmd = IG_CMD_NONE;
+    if (c == "reboot") cmd = IG_CMD_REBOOT;
+    else if (c == "screen") cmd = IG_CMD_SCREEN;
+    else if (c == "home") cmd = IG_CMD_HOME;
+    else if (c == "clock") cmd = IG_CMD_CLOCK;
+    else if (c == "brightness") cmd = IG_CMD_BRIGHT;
+    if (cmd == IG_CMD_NONE) { r->send(400, "application/json", "{\"ok\":false,\"error\":\"unknown command\"}"); return; }
+    integrationsQueueCommand(cmd, v);
+    r->send(200, "application/json", "{\"ok\":true}");
+  });
   server.on("/api/state", HTTP_GET, [](AsyncWebServerRequest* r) {
     r->send(200, "application/json", apiStateJson());
   });

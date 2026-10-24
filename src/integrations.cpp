@@ -407,6 +407,14 @@ void integrationsSetWeatherEx(float feels, int clouds, int windDeg, float tmin, 
   strlcpy(g_wxIcon, icon ? icon : "", sizeof(g_wxIcon));
 }
 
+void integrationsQueueCommand(int cmd, int arg) {
+  {
+    Lock l;
+    g_cmdPending = cmd;
+    g_cmdValue = arg;
+  }
+}
+
 int integrationsTakeCommand(int* arg) {
   ensureMux();
   Lock l;
