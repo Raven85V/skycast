@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Вопрос по сборке и настройке
+    url: https://github.com/skycast-project/skycast/discussions
+    about: Здесь задаём вопросы «как собрать», «как настроить MQTT» и делимся фотографиями собранных станций
+  - name: Home Assistant Community
+    url: https://community.home-assistant.io/
+    about: Общие вопросы по Home Assistant

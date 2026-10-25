@@ -1,0 +1,34 @@
+name: Feature request
+description: Идея, чего не хватает в станции
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Какую задачу хотите решить
+      description: Опишите ситуацию, а не готовое решение
+      placeholder: "Хочу видеть, когда пора проветрить — не хватает CO2 на экране"
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Как это могло бы выглядеть
+      description: Где на экране, в каком виде, что показывать
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Что затронет изменение
+      options:
+        - Прошивка станции
+        - Интеграция Home Assistant
+        - Прошивка датчика (skycast-sensor)
+        - Документация
+        - Не знаю
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Альтернативы
+      description: Что уже пробовали, есть ли обходной путь

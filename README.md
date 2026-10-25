@@ -1,5 +1,10 @@
 # SKYCAST — метеостанция на ESP32-S3 (Sunton 7")
 
+[🇬🇧 English](README.en.md) · **🇷🇺 Русский**
+
+[![Release](https://img.shields.io/github/v/release/skycast-project/skycast?style=flat-square&color=blue)](https://github.com/skycast-project/skycast/releases) [![License: MIT](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE) [![Home Assistant](https://img.shields.io/badge/Home%20Assistant-HACS-41BDF5?style=flat-square)](https://hacs.xyz) [![ESP32-S3](https://img.shields.io/badge/ESP32--S3-Sunton%207%22-red?style=flat-square)](https://github.com/skycast-project/skycast) [![Stars](https://img.shields.io/github/stars/skycast-project/skycast?style=flat-square&color=yellow)](https://github.com/skycast-project/skycast/stargazers)
+
+
 Прошивка домашней метеостанции с большим экраном 800×480: текущая погода, прогноз, датчики по Wi-Fi, история давления, часы, будильник, Telegram-бот и интеграция с Home Assistant.
 
 ![SKYCAST](docs/hero.jpg)
@@ -145,7 +150,7 @@ platformio.ini
 
 ## Лицензия
 
-MIT — см. [LICENSE](LICENSE). Можно свободно использовать, изменять и распространять
+MIT — см. [LICENSE](LICENSE). История версий — [CHANGELOG.md](CHANGELOG.md). Можно свободно использовать, изменять и распространять
 с указанием авторства. Проект собирается из открытых библиотек (LovyanGFX, ArduinoJson,
 ESPAsyncWebServer, PubSubClient, ESP32-audioI2S) — у каждой своя лицензия.
 

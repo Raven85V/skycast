@@ -1,0 +1,62 @@
+name: Bug report
+description: Что-то работает не так — экран, погода, Home Assistant, датчики
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Спасибо за отчёт! Чем больше деталей — тем быстрее починим.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Что произошло
+      description: Опишите поведение и что ожидали увидеть
+      placeholder: "На главном экране вместо прогноза пустые ячейки, хотя ключ OWM указан"
+    validations:
+      required: true
+  - type: input
+    id: firmware
+    attributes:
+      label: Версия прошивки
+      description: Видна в веб-интерфейсе станции или в логе при старте
+      placeholder: "v1.2.1 / skycast"
+    validations:
+      required: true
+  - type: dropdown
+    id: board
+    attributes:
+      label: Плата
+      options:
+        - Sunton ESP32-8048S070 (ESP32-S3, 16MB/8MB, 7")
+        - Другая ESP32-S3 + RGB-панель
+        - ESP32 (классический)
+        - Другое (опишу в описании)
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Что именно сломано
+      options:
+        - Экран / отрисовка
+        - Погода (OWM / Pirate Weather)
+        - Датчики по Wi-Fi
+        - Home Assistant (MQTT)
+        - Home Assistant (HACS-интеграция)
+        - Telegram
+        - Веб-интерфейс / OTA
+        - Звук / будильник
+        - Другое
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Лог UART (115200)
+      description: Вставьте строки с ошибками. Особенно полезны строки `Погода:`, `История:`, `OWM:`
+      render: text
+  - type: textarea
+    id: extra
+    attributes:
+      label: Дополнительно
+      description: Скриншоты, настройки (без паролей и ключей!), что уже пробовали

@@ -11,3 +11,8 @@ build*.log
 .DS_Store
 Thumbs.db
 
+
+# логи сборки
+build*.err
+fs_build*
+*.orig

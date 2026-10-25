@@ -1,0 +1,53 @@
+name: Build firmware
+
+on:
+  workflow_dispatch:
+    inputs:
+      attach_to_release:
+        description: "Приложить firmware.bin к релизу (укажите тег) либо оставить пустым"
+        required: false
+
+jobs:
+  build:
+    name: PlatformIO build (pioarduino)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cache PlatformIO
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.platformio
+            ~/.cache/pip
+          key: pio-${{ hashFiles('platformio.ini') }}
+          restore-keys: pio-
+
+      - name: Install PlatformIO
+        run: |
+          python -m pip install --upgrade pip
+          pip install platformio
+
+      - name: Build firmware
+        run: pio run -e skycast
+
+      - name: Show flash usage
+        run: |
+          grep -E "RAM:|Flash:" .pio/build/skycast/firmware.map 2>/dev/null | tail -5 || true
+
+      - name: Upload firmware artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: skycast-firmware
+          path: |
+            .pio/build/skycast/firmware.bin
+            .pio/build/skycast/bootloader.bin
+            .pio/build/skycast/partitions.bin
+          if-no-files-found: error
+          retention-days: 30
